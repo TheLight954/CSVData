@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.Scanner;
-
 /* Read CSV files
  * 
  * @author Stan Zhang
@@ -9,7 +8,7 @@ public class CSVData {
 	private double[][] data;
 	private String[] columnNames;
 
-	public static String readFiletoString(String filepath) {
+	public static String[] readFiletoString(String filepath) {
 		StringBuilder output = new StringBuilder();
 
 		try (Scanner scanner = new Scanner(new File(filepath))) {
@@ -20,15 +19,36 @@ public class CSVData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return output.toString();
 	}
 
 	public static CSVData readCSVFile(String filename, int numLinesToIgnore, String[] arr) {
-
+		CSVData k = new CSVData();
+		String[] n = readFiletoString(filename);
+		int counter;
+		int cur;
+		int cur1;
+		for(int i=numLinesToIgnore; i<n.length; i++)
+		{
+			counter=0;
+			for(int j=0; j<n.length; j++)
+			{
+				cur1=0;
+				cur = n[i].charAt(j)-'0';
+				while(0<=cur&&cur<=9)
+				{
+					cur1=cur1*10+cur;
+					j++;
+					cur = n[i].charAt(j)-'0';
+				}
+				k.data[i-numLinesToIgnore][counter]=cur1;
+				counter++;
+			}
+		}
+		return k;
 	}
 
 	public static CSVData readCSVFile(String filename, int numLinesToIgnore) {
-		String n = readFiletoString(filename);
+
 	}
 
 	public double[][] getColumns(int startIndex, int endIndex) {
@@ -59,13 +79,9 @@ public class CSVData {
 		return ans;
 	}
 
-	public double[] getColumn(String name) {
-		return null;
-	}
-
 	/****
 	 * Returns a new CSVData object for a file ignoring lines at the top. It
-	 * uses teh first row as the column names. All other data is scored as
+	 * uses the first row as the column names. All other data is scored as
 	 * doubles.
 	 *
 	 * @param filename
