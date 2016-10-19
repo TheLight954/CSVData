@@ -7,18 +7,32 @@ import java.util.Scanner;
 public class CSVData {
 	private double[][] data;
 	private String[] columnNames;
-
-	public static String[] readFiletoString(String filepath) {
-		StringBuilder output = new StringBuilder();
-
-		try (Scanner scanner = new Scanner(new File(filepath))) {
-			while (scanner.hasNext()) {
-				String line = scanner.nextLine();
-				output.append(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+	public static int lineCounter (String filepath){
+		int count = 0;
+		Scanner input = new Scanner(new File(filepath));
+		while (input.hasNextLine()) {
+		    count++;
 		}
+		return count;
+	}
+	public static String[] readFiletoString(String filepath) {
+		String[] ans = new String[lineCounter(filepath)]
+		try {
+		File file = new File(filepath);
+		FileReader fileReader = new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		StringBuffer stringBuffer = new StringBuffer();
+		String line;
+		int counter = 0;
+		while (bufferedReader.readLine() != null) {
+			ans[counter]=bufferedReader.readLine();
+			counter++;
+		}
+		fileReader.close();
+		} catch (IOException e) {
+		e.printStackTrace();
+		}
+		return ans;
 	}
 
 	public static CSVData readCSVFile(String filename, int numLinesToIgnore, String[] arr) {
