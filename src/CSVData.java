@@ -37,6 +37,7 @@ public class CSVData {
 
 	public static CSVData readCSVFile(String filename, int numLinesToIgnore, String[] arr) {
 		CSVData k = new CSVData();
+		k.columnNames = arr;
 		String[] n = readFiletoString(filename);
 		int counter;
 		int cur;
@@ -62,7 +63,30 @@ public class CSVData {
 	}
 
 	public static CSVData readCSVFile(String filename, int numLinesToIgnore) {
-
+		CSVData k = new CSVData();
+		String[] n = readFiletoString(filename);
+		int counter;
+		int cur;
+		int cur1;
+		for(int i=numLinesToIgnore; i<n.length; i++)
+		{
+			counter=0;
+			for(int j=0; j<n.length; j++)
+			{
+				cur1=0;
+				cur = n[i].charAt(j)-'0';
+				while(0<=cur&&cur<=9)
+				{
+					cur1=cur1*10+cur;
+					j++;
+					cur = n[i].charAt(j)-'0';
+				}
+				k.data[i-numLinesToIgnore][counter]=cur1;
+				counter++;
+			}
+		}
+		return k;
+		
 	}
 
 	public double[][] getColumns(int startIndex, int endIndex) {
